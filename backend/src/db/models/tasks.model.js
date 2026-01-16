@@ -1,0 +1,41 @@
+import mongoose from 'mongoose'
+
+const taskSchema = new mongoose.Schema(
+    {
+        // ------(later) to maintain info about task owner ----
+        // user_id:{
+        //     type: mongoose.Schema.Types.ObjectId,
+        //     ref: 'User',
+        //     required: true
+        // },
+        title: {
+            type: String,
+            required: true,
+        },
+        description: {
+            type: String,
+        },
+        status: {
+            type: String,
+            enum: ['created', 'in progress', 'done', 'bugs', 'testing'], // bugs,testing set disabled by default
+        },
+        parent_task: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Task',
+        },
+        tags: {
+            type: [String],
+            default: [],
+        },
+
+        // createdAt -> defined in timestamps
+        // due_date:{
+        //     type: Date,
+        // },
+    },
+    { timestamps: true },
+)
+
+const Task = mongoose.model('Task', taskSchema)
+
+export {Task}
