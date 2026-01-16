@@ -1,0 +1,30 @@
+{
+    "name": "project-manager",
+    "version": "1.0.0",
+    "description": "Project Manager",
+    "scripts": {
+        "prepare": "husky install"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "**/*.{js,jsx}": [
+            "npx prettier --write",
+            "npx eslint --fix"
+        ]
+    },
+    "devDependencies": {
+        "husky": "^8.0.3",
+        "lint-staged": "^15.1.0",
+        "prettier": "^3.8.0",
+        "eslint": "^9.39.2",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-jsx-a11y": "^6.10.2",
+        "eslint-plugin-react": "^7.37.5",
+        "eslint-plugin-react-hooks": "^7.0.1",
+        "eslint-plugin-react-refresh": "^0.4.26"
+    }
+}
