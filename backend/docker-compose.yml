@@ -1,0 +1,27 @@
+services:
+  mongodb:
+    image: mongo:8.2
+    ports: 
+      - '27017:27017'
+    volumes:
+      - mongo_data:/data/db
+  
+  n8n:
+    image: n8nio/n8n
+    ports:
+      - '5678:5678'
+    volumes:
+      - n8n_data:/home/node/.n8n
+  # api:
+    # build: .
+    # ports:
+    # - "3000:3000"
+    # environment:
+    #   - MONGO_URI=mongodb://mongodb:27017/project_manager
+
+
+volumes:
+  mongo_data:
+  n8n_data:
+
+
