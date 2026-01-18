@@ -28,10 +28,12 @@ const taskSchema = new Schema(
         status: {
             type: String,
             enum: ['created', 'in progress', 'done', 'bugs', 'testing'], // bugs,testing set disabled by default
+            required: true
         },
         parent_task: {
-            type: Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId, // to change -> childTask [tasksID]
             ref: 'Task',
+            default: null
         },
         tags: {
             type: [String],
