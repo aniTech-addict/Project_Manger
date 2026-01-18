@@ -17,14 +17,16 @@
         ]
     },
     "devDependencies": {
-        "husky": "^8.0.3",
-        "lint-staged": "^15.1.0",
-        "prettier": "^3.8.0",
+        "@commitlint/cli": "^18.4.3",
+        "@commitlint/config-conventional": "^18.4.3",
         "eslint": "^9.39.2",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-jsx-a11y": "^6.10.2",
         "eslint-plugin-react": "^7.37.5",
         "eslint-plugin-react-hooks": "^7.0.1",
-        "eslint-plugin-react-refresh": "^0.4.26"
+        "eslint-plugin-react-refresh": "^0.4.26",
+        "husky": "^8.0.3",
+        "lint-staged": "^15.1.0",
+        "prettier": "^3.8.0"
     }
 }
