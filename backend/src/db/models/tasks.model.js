@@ -1,13 +1,23 @@
-import mongoose from 'mongoose'
+import mongoose, {Schema} from 'mongoose'
+import Board from './board.model.js'
 
-const taskSchema = new mongoose.Schema(
+const taskSchema = new Schema(
     {
+
         // ------(later) to maintain info about task owner ----
         // user_id:{
         //     type: mongoose.Schema.Types.ObjectId,
         //     ref: 'User',
         //     required: true
         // },
+
+        boardId: {
+            type: Schema.Types.ObjectId,
+            ref: 'Board',
+            required: true,
+            index: true
+        },
+        
         title: {
             type: String,
             required: true,
@@ -20,7 +30,7 @@ const taskSchema = new mongoose.Schema(
             enum: ['created', 'in progress', 'done', 'bugs', 'testing'], // bugs,testing set disabled by default
         },
         parent_task: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: 'Task',
         },
         tags: {
