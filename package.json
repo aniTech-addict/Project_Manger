@@ -3,7 +3,8 @@
     "version": "1.0.0",
     "description": "Project Manager",
     "scripts": {
-        "prepare": "husky install"
+        "prepare": "husky install",
+        "format": "prettier --write ."
     },
     "husky": {
         "hooks": {
