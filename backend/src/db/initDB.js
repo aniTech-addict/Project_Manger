@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import { config } from '../../config/.env.config.js'
 
-const intiDB = async () => {
+export const initDB = async () => {
 
     try{
         await mongoose.connect(config.MONGODB_URI)
@@ -15,5 +15,3 @@ const intiDB = async () => {
         console.log("Error Connecting to db")
     })
 }
-
-export default intiDB
