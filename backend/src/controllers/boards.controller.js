@@ -68,6 +68,7 @@ export const listTasks = async (req, res) =>{
 }
 
 export const createTask = async (req, res) =>{
+    const boardId = req.params.boardId
     const {title, description, status, tags} = req.body
     if (!title){
         throw new ApiError(400,"Title not defined")
@@ -82,6 +83,6 @@ export const createTask = async (req, res) =>{
         throw new ApiError(400,"Tags not defined")
     }
 
-    const result = await createTaskService({ title, description, status, tags });
+    const result = await createTaskService({ title, description, status, tags }, boardId);
     new ApiResponse(res, 201, { id: result._id }, "Task created successfully");
 }
