@@ -1,11 +1,14 @@
-import {Router} from 'express'
-import { listTask, softDeleteTask, updateTask } from '../controllers/tasks.controller.js'
+import { Router } from 'express';
+import {
+  listTask,
+  softDeleteTask,
+  updateTask,
+} from '../controllers/tasks.controller.js';
 
-export const tasksRouter = Router()
+export const tasksRouter = Router();
 
+tasksRouter.get('/:taskId', listTask);
 
-tasksRouter.get('/:taskId',listTask )
+tasksRouter.delete('/:taskId', softDeleteTask);
 
-tasksRouter.delete('/:taskId', softDeleteTask)
-
-tasksRouter.patch('/:taskId', updateTask)
+tasksRouter.patch('/:taskId', updateTask);

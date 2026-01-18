@@ -1,13 +1,15 @@
 # Code Standards:
 
 ## Naming ( camelCase )
+
 1. Folder naming: Use plurals whenever possible
-2. file naming: 
-    a) Suffix to reflect type of file, example: `boards.service.js`
-    b) use plurals if file serves more than one function 
+2. file naming:
+   a) Suffix to reflect type of file, example: `boards.service.js`
+   b) use plurals if file serves more than one function
 
 ## Exports
-1. AVOID using default exports 
+
+1. AVOID using default exports
 2. if a function is to be exported, declare it at function definition stage
 
 Example:
