@@ -6,7 +6,7 @@ export const createBoardService = async (board) => {
   return await createdBoard.save();
 };
 
-export const listBoard = async (boardId) => {
+export const listBoardService = async (boardId) => {
   const foundBoard = await Board.findById(boardId);
   if (!foundBoard) {
     return new ApiError(403, 'Board Not Found');

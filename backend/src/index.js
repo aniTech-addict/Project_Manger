@@ -1,13 +1,13 @@
 import express from 'express';
 import cors from 'cors';
 import { config } from '../config/.env.config.js';
-import { intiDB } from './db/initDB.js';
+import { initDB } from './db/initDB.js';
 
 import { boardRouter } from './routes/boards.route.js';
 import { tasksRouter } from './routes/tasks.route.js';
 import ApiError from './helpers/ApiError.helper.js';
 
-await intiDB();
+await initDB();
 const app = express();
 
 app.use(cors());
