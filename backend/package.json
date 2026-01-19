@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
-    "start": "nodemon src/index.js"
+    "start": "docker compose up -d && nodemon src/index.js"
   },
   "author": "Kirti Anand",
   "license": "ISC",
