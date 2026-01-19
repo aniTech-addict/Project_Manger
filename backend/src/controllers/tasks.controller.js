@@ -3,7 +3,7 @@ import ApiResponse from '../helpers/ApiResponse.js';
 
 import {
   listTaskService,
-  // deleteTaskService,
+  deleteTaskService,
   updateTaskService,
   // deleteTasksService
 } from '../services/tasks.service.js';
@@ -23,8 +23,8 @@ export const deleteTask = async (req, res) => {
   if (!taskId) {
     throw new ApiError(400, 'Task ID is required');
   }
-  const deleteCount = await deleteTaskService(taskId);
-  new ApiResponse(res, 200, { deleteCount }, 'Task deleted successfully');
+  const deletedTaskId = await deleteTaskService(taskId);
+  new ApiResponse(res, 200,  {id: deletedTaskId} , 'Task deleted successfully');
 };
 
 export const deleteTasksService = async(req, res) => {
