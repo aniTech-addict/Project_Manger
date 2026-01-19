@@ -2,9 +2,11 @@ import mongoose from 'mongoose';
 import { describe, test, expect } from '@jest/globals';
 
 import { Board } from '../../db/models/board.model';
-import { createBoardService } from '../../services/boards.service.js';
+import { createBoardService, listBoardsService } from '../../services/boards.service.js';
+import { softDeleteBoard } from '../../controllers/boards.controller.js';
+import ApiError from '../../helpers/ApiError.helper.js';
 
-describe('creating Board', () => {
+describe('Creating Board', () => {
   (test('with all parameters should pass', async () => {
     const board = {
       title: 'Auth',
@@ -33,3 +35,19 @@ describe('creating Board', () => {
       }
     }));
 });
+
+describe('Deleting board', ()=>{
+  test('No board Id given, delete should fail', async()=>{
+    const mockReq = { params: { boardId: "" } };
+    const mockRes = {};
+    await expect(softDeleteBoard(mockReq, mockRes)).rejects.toThrow(ApiError);
+  })
+})
+
+describe( 'List Boards', ()=> {
+  test('List all boards', async()=>{
+    const result = await listBoardsService();
+    const expectedResult = await Board.find()
+    expect(result).toEqual(expectedResult)
+  })
+})

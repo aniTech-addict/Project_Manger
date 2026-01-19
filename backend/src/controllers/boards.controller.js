@@ -4,6 +4,7 @@ import ApiResponse from '../helpers/ApiResponse.js';
 import {
   createBoardService,
   listBoardService,
+  listBoardsService
 } from '../services/boards.service.js';
 
 export const listBoard = async (req, res) => {
@@ -18,6 +19,7 @@ export const listBoard = async (req, res) => {
 
 export const listBoards = async (req, res) => {
   const result = await listBoardsService();
+  new ApiResponse(res, 200, result);
 };
 
 export const createBoard = async (req, res) => {
@@ -36,7 +38,7 @@ export const softDeleteBoard = async (req, res) => {
     throw new ApiError(400, 'Board ID is required');
   }
   const deleteCount = await softDeleteBoardService(boardId);
-  new ApiResponse(res, 200, { id: taskId }, 'Task archived successfully');
+  new ApiResponse(res, 200, { id: boardId }, 'Task archived successfully');
 };
 
 export const hardDeleteBoard = async (req, res) => {
