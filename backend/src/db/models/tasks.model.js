@@ -1,6 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-import Board from './board.model.js';
-
+import { Board } from './board.model';
 const taskSchema = new Schema(
   {
     // ------(later) to maintain info about task owner ----
