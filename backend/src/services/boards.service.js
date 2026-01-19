@@ -1,6 +1,5 @@
 import { Board } from '../db/models/board.model.js';
 import ApiError from '../helpers/ApiError.helper.js';
-import ApiResponse from '../helpers/ApiResponse.js';
 
 export const createBoardService = async (board) => {
   const createdBoard = new Board(board);
@@ -28,4 +27,21 @@ export const softDeleteBoardService = async (boardId) => {
   if (!deleteCount) {
     throw new ApiError(404, 'No Board Found, Delete Unsuccessful')
   }
+  return deleteCount;
+};
+
+export const hardDeleteBoardService = async (boardId) => {
+  const deleteCount = await Board.findByIdAndDelete(boardId)
+  if (!deleteCount) {
+    throw new ApiError(404, 'No Board Found, Delete Unsuccessful')
+  }
+  return deleteCount;
+};
+
+export const updateBoardService = async (boardId, updateData) => {
+  const updatedBoard = await Board.findByIdAndUpdate(boardId, updateData, { new: true });
+  if (!updatedBoard) {
+    throw new ApiError(404, 'Board not found');
+  }
+  return updatedBoard;
 };

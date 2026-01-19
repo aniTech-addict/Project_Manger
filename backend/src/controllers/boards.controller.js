@@ -4,8 +4,13 @@ import ApiResponse from '../helpers/ApiResponse.js';
 import {
   createBoardService,
   listBoardService,
-  listBoardsService
+  listBoardsService,
+  softDeleteBoardService,
+  hardDeleteBoardService,
+  updateBoardService,
 } from '../services/boards.service.js';
+
+import { listTasksService, createTaskService } from '../services/tasks.service.js';
 
 export const listBoard = async (req, res) => {
   const boardId = req.params.boardId;
@@ -37,7 +42,7 @@ export const softDeleteBoard = async (req, res) => {
   if (!boardId) {
     throw new ApiError(400, 'Board ID is required');
   }
-  const deleteCount = await softDeleteBoardService(boardId);
+  await softDeleteBoardService(boardId);
   new ApiResponse(res, 200, { id: boardId }, 'Task archived successfully');
 };
 
@@ -46,11 +51,11 @@ export const hardDeleteBoard = async (req, res) => {
   if (!boardId) {
     throw new ApiError(400, 'Board ID is required');
   }
-  const deleteCount = await hardDeleteBoardService(boardId);
+  await hardDeleteBoardService(boardId);
   new ApiResponse(
     res,
     200,
-    { deleteCount },
+    { id: boardId },
     'Board permanently deleted successfully'
   );
 };
@@ -60,13 +65,20 @@ export const updateBoard = async (req, res) => {
   if (!boardId) {
     throw new ApiError(400, 'Board ID is required');
   }
-  const result = await updateBoardService(boardId);
+  const result = await updateBoardService(boardId, req.body);
   new ApiResponse(res, 200, result, 'Board updated successfully');
 };
 
 // ================================== TASK ===================================
 
-export const listTasks = async (req, res) => {};
+export const listTasks = async (req, res) => {
+  const boardId = req.params.boardId;
+  if (!boardId) {
+    throw new ApiError(400, 'Board id not defined');
+  }
+  const result = await listTasksService(boardId);
+  new ApiResponse(res, 200, result, 'Tasks retrieved');
+};
 
 export const createTask = async (req, res) => {
   const boardId = req.params.boardId;
