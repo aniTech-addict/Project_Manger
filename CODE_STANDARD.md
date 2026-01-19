@@ -59,3 +59,24 @@ Example:
             frontend/api
             frontend/env
             frontend/component
+
+## Response Standards
+
+Use these HTTP status codes for API responses. Include descriptive messages.
+
+### Success Codes
+- **200 OK**: Successful GET, PUT, DELETE.
+- **201 Created**: Successful POST creating a resource.
+
+### Client Error Codes
+- **400 Bad Request**: Invalid client input (missing fields, wrong types).
+- **401 Unauthorized**: Authentication required/invalid.
+- **403 Forbidden**: Authenticated but no permission.
+- **404 Not Found**: Resource not found.
+
+### Server Error Codes
+- **500 Internal Server Error**: Unexpected server errors.
+
+### Guidelines
+- Use `ApiError` for errors, `ApiResponse` for successes.
+- Log server errors internally; keep client messages generic.
