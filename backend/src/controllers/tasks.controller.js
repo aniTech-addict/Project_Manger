@@ -1,12 +1,12 @@
 import ApiError from '../helpers/ApiError.helper.js';
 import ApiResponse from '../helpers/ApiResponse.js';
 
-// import {
-//   // listTaskService,
-//   // softDeleteTaskByIdService,
-//   // hardDeleteTaskService,
-//   updateTaskService,
-// } from '../services/tasks.service.js';
+import {
+  listTaskService,
+  // deleteTaskService,
+  updateTaskService,
+  // deleteTasksService
+} from '../services/tasks.service.js';
 
 export const listTask = async (req, res) => {
   const taskId = req.params.taskId;
@@ -18,34 +18,32 @@ export const listTask = async (req, res) => {
   new ApiResponse(res, 200, result, 'Task retrieved successfully');
 };
 
-export const softDeleteTask = async (req, res) => {
+export const deleteTask = async (req, res) => {
   const taskId = req.params.taskId;
   if (!taskId) {
     throw new ApiError(400, 'Task ID is required');
   }
-  const deleteCount = await softDeleteTaskByIdService(taskId);
+  const deleteCount = await deleteTaskService(taskId);
   new ApiResponse(res, 200, { deleteCount }, 'Task deleted successfully');
 };
 
-export const hardDeleteTask = async (req, res) => {
-  const taskId = req.params.taskId;
-  if (!taskId) {
-    throw new ApiError(400, 'Task ID is required');
+export const deleteTasksService = async(req, res) => {
+  const tasks = req.body.taskIds
+  if (tasks.length == 0){
+    throw ApiError(400, "Empty tasksIds provided")
   }
-  const deleteCount = await hardDeleteTaskService(taskId);
-  new ApiResponse(
-    res,
-    200,
-    { deleteCount },
-    'Task permanently deleted successfully'
-  );
-};
+  const result = await deleteTasksService(tasks)
+  new ApiResponse(res, result, "Tasks deleted")
+}
 
 export const updateTask = async (req, res) => {
   const taskId = req.params.taskId;
+  const updateData = req.body
+
   if (!taskId) {
     throw new ApiError(400, 'Task ID is required');
   }
-  const result = await updateTaskService(taskId);
+
+  const result = await updateTaskService(taskId, updateData);
   new ApiResponse(res, 200, result, 'Task updated successfully');
 };
