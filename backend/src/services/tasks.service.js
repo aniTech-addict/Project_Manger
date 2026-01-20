@@ -1,5 +1,5 @@
-import { Task } from '../db/models/tasks.model';
-import ApiError from '../helpers/ApiError.helper';
+import { Task } from '../db/models/tasks.model.js';
+import ApiError from '../helpers/ApiError.helper.js';
 
 // ========================= imported in Boards.controller ===============================
 
@@ -23,7 +23,7 @@ export const listTaskService = async (listId) => {
   return foundTask;
 };
 
-export const deleteTask = async (taskId) => {
+export const deleteTaskService = async (taskId) => {
   const deleteCount = Task.findByIdAndDelete(taskId);
   if (!deleteCount) {
     throw new ApiError(404, 'error: Task not found');
