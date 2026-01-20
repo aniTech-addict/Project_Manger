@@ -23,12 +23,13 @@ export const listBoardsService = async () => {
 };
 
 export const softDeleteBoardService = async (boardId) => {
-  const deleteCount = await Board.findByIdAndDelete(boardId)
-  if (!deleteCount) {
-    throw new ApiError(404, 'No Board Found, Delete Unsuccessful')
+  const updatedBoard = await Board.findByIdAndUpdate(boardId, { isDeleted: true }, { new: true });
+  if (!updatedBoard) {
+    throw new ApiError(404, 'No Board Found, Delete Unsuccessful');
   }
-  return deleteCount;
+  return { id: updatedBoard._id, isDeleted: updatedBoard.isDeleted };
 };
+
 
 export const hardDeleteBoardService = async (boardId) => {
   const deleteCount = await Board.findByIdAndDelete(boardId)

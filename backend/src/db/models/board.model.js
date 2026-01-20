@@ -13,6 +13,12 @@ const boardSchema = new Schema(
     tags: {
       type: [String],
     },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+      index: true
+
+    }
   },
   { timestamps: true }
 );

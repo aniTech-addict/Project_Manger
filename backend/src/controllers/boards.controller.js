@@ -43,7 +43,7 @@ export const softDeleteBoard = async (req, res) => {
     throw new ApiError(400, 'Board ID is required');
   }
   await softDeleteBoardService(boardId);
-  new ApiResponse(res, 200, { id: boardId }, 'Task archived successfully');
+  new ApiResponse(res, 200, { id: boardId }, 'Board archived successfully');
 };
 
 export const hardDeleteBoard = async (req, res) => {
