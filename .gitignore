@@ -3,7 +3,8 @@ Notes/
 node_modules/
 .env
 
-
+DOCS/Setup
+DOCS/Learning
 
 # Logs
 logs

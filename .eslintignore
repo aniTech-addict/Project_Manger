@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Environment files
+.env
+.env.*
+
+# Configuration
+vite.config.js
+jest.config.json
+eslint.config.js
+
+# Generated files
+coverage/
+.vite/
+
+# OS
+.DS_Store
