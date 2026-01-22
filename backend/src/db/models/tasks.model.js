@@ -37,7 +37,11 @@ const taskSchema = new Schema(
       type: [String],
       default: [],
     },
-
+    isDeleted: {
+      type: Boolean,
+      default: false,
+      index: true,
+    }
     // createdAt -> defined in timestamps
     // due_date:{
     //     type: Date,
