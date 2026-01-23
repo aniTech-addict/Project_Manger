@@ -5,11 +5,23 @@ import { TaskTitleSection } from "../components/task/TaskTitleSection";
 import { TaskDescription } from "../components/task/TaskDescription";
 import { TaskTimeline } from "../components/task/TaskTimeline";
 import { TaskSidebar } from "../components/task/TaskSidebar";
+import { useTask } from "../hooks/useTasks";
 
 const TaskDetail = () => {
     const { id } = useParams();
     const location = useLocation();
-    const card = location.state?.card;
+    const { data: fetchedTask, isLoading, error } = useTask(id);
+
+    const card = fetchedTask ? {
+        id: fetchedTask._id,
+        title: fetchedTask.title,
+        description: fetchedTask.description,
+        status: fetchedTask.status,
+        tags: fetchedTask.tags?.map(t => ({ label: t, variant: 'default' })) || [],
+    } : location.state?.card;
+
+    if (isLoading && !card) return <div className="p-8 text-center text-gray-500">Loading task...</div>;
+    if (error) return <div className="p-8 text-center text-red-500">Error loading task: {error.message}</div>;
 
     return (
         <div className="max-w-6xl mx-auto">

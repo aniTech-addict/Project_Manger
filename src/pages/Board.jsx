@@ -17,11 +17,13 @@ import { BoardColumn } from "../components/board/BoardColumn";
 import { BoardHeader } from "../components/board/BoardHeader";
 import { useKanbanBoard } from "../hooks/useKanbanBoard";
 import { useBoard, useBoardTasks } from "../hooks/useBoards";
+import { useUpdateTask } from "../hooks/useTasks";
 
 const Board = () => {
     const { id } = useParams();
     const { data: board, isLoading: boardLoading } = useBoard(id);
     const { data: tasks = [], isLoading: tasksLoading } = useBoardTasks(id);
+    const { mutate: updateTask } = useUpdateTask();
 
     const {
         columns,
@@ -30,7 +32,13 @@ const Board = () => {
         handleDragStart,
         handleDragOver,
         handleDragEnd
-    } = useKanbanBoard(tasks);
+    } = useKanbanBoard(tasks, (taskId, newStatus) => {
+        console.log("Drag Ended. Updating task:", taskId, "to status:", newStatus);
+        updateTask({ id: taskId, status: newStatus }, {
+            onSuccess: () => console.log("Task update successful"),
+            onError: (err) => console.error("Task update failed", err)
+        });
+    });
 
     const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] = useState(false);
 

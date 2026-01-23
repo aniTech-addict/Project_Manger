@@ -11,9 +11,10 @@ import {
 } from "@dnd-kit/sortable";
 import { initialColumns } from "../data/board-data";
 
-export const useKanbanBoard = (tasks = []) => {
+export const useKanbanBoard = (tasks = [], onTaskMoved) => {
     const [columns, setColumns] = useState(initialColumns);
     const [activeId, setActiveId] = useState(null);
+    const [activeColId, setActiveColId] = useState(null);
 
     useEffect(() => {
         if (!tasks.length) return;
@@ -32,7 +33,9 @@ export const useKanbanBoard = (tasks = []) => {
                 id: task._id,
                 title: task.title,
                 description: task.description,
-                tags: task.tags?.map(t => ({ label: t, variant: 'default' })) || []
+                tags: task.tags?.map(t => ({ label: t, variant: 'default' })) || [],
+                // Store original task data if needed
+                ...task
             });
         });
 
@@ -59,6 +62,7 @@ export const useKanbanBoard = (tasks = []) => {
 
     const handleDragStart = (event) => {
         setActiveId(event.active.id);
+        setActiveColId(findContainer(event.active.id));
     };
 
     const handleDragOver = (event) => {
@@ -125,10 +129,18 @@ export const useKanbanBoard = (tasks = []) => {
         if (
             !activeContainer ||
             !overContainer ||
-            activeContainer !== overContainer
+            !activeColId
         ) {
             setActiveId(null);
+            setActiveColId(null);
             return;
+        }
+
+        // Check if the container changed from the START of the drag
+        if (activeColId !== overContainer) {
+            if (onTaskMoved) {
+                onTaskMoved(active.id, overContainer);
+            }
         }
 
         const activeIndex = columns.find(c => c.id === activeContainer).cards.findIndex(i => i.id === active.id);
@@ -149,6 +161,7 @@ export const useKanbanBoard = (tasks = []) => {
         }
 
         setActiveId(null);
+        setActiveColId(null);
     };
 
     return {
