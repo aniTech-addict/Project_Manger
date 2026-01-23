@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { getBoards, getBoard, getBoardTasks, createBoard, updateBoard, deleteBoard, createTask } from '../api/boards.api';
 
 export const useBoards = () => {
@@ -34,7 +35,11 @@ export const useCreateTask = () => {
         mutationFn: createTask,
         onSuccess: (data, variables) => {
             queryClient.invalidateQueries({ queryKey: ['board', variables.boardId, 'tasks'] });
+            toast.success("Task created successfully!");
         },
+        onError: (err) => {
+            toast.error(`Failed to create task: ${err.message}`);
+        }
     });
 };
 
@@ -45,7 +50,11 @@ export const useCreateBoard = () => {
         mutationFn: createBoard,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['boards'] });
+            toast.success("Board created successfully!");
         },
+        onError: (err) => {
+            toast.error(`Failed to create board: ${err.message}`);
+        }
     });
 };
 
@@ -57,7 +66,11 @@ export const useUpdateBoard = () => {
         onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ['boards'] });
             queryClient.invalidateQueries({ queryKey: ['board', data.data.id] });
+            toast.success("Board updated successfully!");
         },
+        onError: (err) => {
+            toast.error(`Failed to update board: ${err.message}`);
+        }
     });
 };
 
@@ -68,6 +81,10 @@ export const useDeleteBoard = () => {
         mutationFn: deleteBoard,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['boards'] });
+            toast.success("Board deleted successfully!");
         },
+        onError: (err) => {
+            toast.error(`Failed to delete board: ${err.message}`);
+        }
     });
 };

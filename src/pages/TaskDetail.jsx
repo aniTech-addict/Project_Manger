@@ -49,7 +49,11 @@ const TaskDetail = () => {
         }
     };
 
-    if (isLoading && !card) return <div className="p-8 text-center text-gray-500">Loading task...</div>;
+    if (isLoading && !card) return (
+        <div className="flex items-center justify-center h-screen">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        </div>
+    );
     if (error) return <div className="p-8 text-center text-red-500">Error loading task: {error.message}</div>;
 
     return (

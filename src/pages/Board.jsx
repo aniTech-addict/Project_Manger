@@ -42,7 +42,11 @@ const Board = () => {
 
     const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] = useState(false);
 
-    if (boardLoading || tasksLoading) return <div className="p-8 text-center text-gray-500">Loading board...</div>;
+    if (boardLoading || tasksLoading) return (
+        <div className="flex items-center justify-center h-full">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        </div>
+    );
 
     const dropAnimation = {
         sideEffects: defaultDropAnimationSideEffects({

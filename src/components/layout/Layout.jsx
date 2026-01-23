@@ -1,4 +1,5 @@
 import { Outlet, NavLink } from 'react-router-dom';
+import { Toaster } from 'sonner';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
@@ -14,6 +15,7 @@ import {
 const Layout = () => {
     return (
         <div className="flex h-screen bg-gray-50 overflow-hidden font-sans text-gray-900">
+            <Toaster position="top-right" richColors />
             {/* Sidebar */}
             <div className="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col">
                 {/* Brand */}

@@ -12,7 +12,13 @@ import {
 import { initialColumns } from "../data/board-data";
 
 export const useKanbanBoard = (tasks = [], onTaskMoved) => {
-    const [columns, setColumns] = useState(initialColumns);
+    const [columns, setColumns] = useState([
+        { id: 'created', title: 'To Do', cards: [] },
+        { id: 'in progress', title: 'In Progress', cards: [] },
+        { id: 'done', title: 'Done', cards: [] },
+        { id: 'bugs', title: 'Bugs', cards: [] },
+        { id: 'testing', title: 'Testing', cards: [] }
+    ]);
     const [activeId, setActiveId] = useState(null);
     const [activeColId, setActiveColId] = useState(null);
 
