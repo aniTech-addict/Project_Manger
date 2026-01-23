@@ -22,12 +22,12 @@ export const TaskCard = ({ card, isOverlay }) => {
 
   return (
     <div
-      className={`p-4 rounded-lg bg-white border transition-all duration-200 group relative ${
+      className={`p-4 rounded-lg bg-white border transition-all duration-200 group relative transform-gpu ${
         card.highlight
           ? 'border-blue-300 ring-2 ring-blue-500/20 shadow-md'
           : card.isBug
             ? 'border-red-200 bg-red-50/10 border-l-4 border-l-red-500 hover:shadow-lg'
-            : 'border-gray-200 hover:border-blue-300 hover:shadow-lg hover:-translate-y-0.5'
+            : 'border-gray-200 hover:border-blue-300 hover:shadow-lg'
       } ${isOverlay ? 'rotate-2 shadow-2xl cursor-grabbing scale-105' : 'cursor-grab shadow-sm'}`}
     >
       <div className="flex justify-between items-start mb-2">
