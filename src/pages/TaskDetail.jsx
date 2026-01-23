@@ -2,9 +2,13 @@ import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { MoreHorizontalIcon, ShareIcon, PlusIcon } from "../components/ui/icons";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 
 const TaskDetail = () => {
+    const { id } = useParams();
+    const location = useLocation();
+    const card = location.state?.card;
+
     return (
         <div className="max-w-6xl mx-auto">
             {/* Header / Breadcrumb */}
@@ -14,7 +18,7 @@ const TaskDetail = () => {
                     <span className="mx-2">/</span>
                     <Link to="/projects/1" className="hover:text-gray-900 transition-colors">Project Alpha</Link>
                     <span className="mx-2">/</span>
-                    <span className="font-semibold text-gray-900">PROJ-42</span>
+                    <span className="font-semibold text-gray-900">{card?.id || id || "PROJ-42"}</span>
                 </div>
                 <div className="flex items-center space-x-2">
                     <Button variant="outline" size="sm">
@@ -41,7 +45,7 @@ const TaskDetail = () => {
                             </div>
                             <span className="text-gray-500 text-sm">Sarah Chen opened this task 2 days ago • 4 comments</span>
                         </div>
-                        <h1 className="text-3xl font-bold text-gray-900 mb-6">Implement OAuth2.0 Authentication Flow</h1>
+                        <h1 className="text-3xl font-bold text-gray-900 mb-6">{card?.title || "Implement OAuth2.0 Authentication Flow"}</h1>
                     </div>
 
                     {/* Description Card */}

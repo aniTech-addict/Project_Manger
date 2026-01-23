@@ -8,6 +8,7 @@ import {
     useSensors,
     DragOverlay,
     defaultDropAnimationSideEffects,
+    useDroppable,
 } from "@dnd-kit/core";
 import {
     arrayMove,
@@ -25,7 +26,7 @@ import {
     MoreHorizontalIcon,
     ShareIcon,
 } from "../components/ui/icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const initialColumns = [
     {
@@ -107,10 +108,10 @@ const TaskCard = ({ card, isOverlay }) => {
     return (
         <div
             className={`p-4 rounded-lg bg-white border shadow-sm cursor-grab hover:shadow-md transition-all group relative ${card.highlight
-                    ? "border-blue-200 ring-2 ring-blue-500/20"
-                    : card.isBug
-                        ? "border-red-200 bg-red-50/10 border-l-4 border-l-red-500"
-                        : "border-gray-200 hover:border-blue-300"
+                ? "border-blue-200 ring-2 ring-blue-500/20"
+                : card.isBug
+                    ? "border-red-200 bg-red-50/10 border-l-4 border-l-red-500"
+                    : "border-gray-200 hover:border-blue-300"
                 } ${isOverlay ? "rotate-2 shadow-xl cursor-grabbing scale-105" : ""}`}
         >
             <div className="flex justify-between items-start mb-2">
@@ -189,6 +190,7 @@ const TaskCard = ({ card, isOverlay }) => {
 };
 
 const SortableTaskCard = ({ card }) => {
+    const navigate = useNavigate();
     const {
         attributes,
         listeners,
@@ -206,14 +208,18 @@ const SortableTaskCard = ({ card }) => {
 
     return (
         <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="touch-none">
-            {/* Wrap with Link only if not dragging to avoid navigation issues, usually handled by preventing default on drag */}
-            {/* For simplicity in this demo, we can just render the card. Navigation is secondary to sorting in this view. */}
-            {/* Or ideally use a separate click handler for navigation if not dragging. */}
-            <div onClick={(e) => {
-                // Prevent navigation if it was a drag (simple heuristic or just rely on dnd-kit's prevention)
-            }}>
+            <div onClick={() => navigate(`/tasks/${card.id}`, { state: { card } })}>
                 <TaskCard card={card} />
             </div>
+        </div>
+    );
+};
+
+const BoardColumn = ({ id, children }) => {
+    const { setNodeRef } = useDroppable({ id });
+    return (
+        <div ref={setNodeRef} className="flex-1 overflow-y-auto space-y-3 pr-2 pb-10">
+            {children}
         </div>
     );
 };
@@ -420,7 +426,7 @@ const Board = () => {
         const activeIndex = columns.find(c => c.id === activeContainer).cards.findIndex(i => i.id === active.id);
         const overIndex = columns.find(c => c.id === overContainer).cards.findIndex(i => i.id === over?.id);
 
-        if (activeIndex !== overIndex) {
+        if (activeIndex !== overIndex && overContainer !== over?.id) {
             setColumns((prev) => {
                 return prev.map(col => {
                     if (col.id === activeContainer) {
@@ -591,8 +597,8 @@ const Board = () => {
                                         </span>
                                         <span
                                             className={`flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-medium ${col.id === "bugs"
-                                                    ? "bg-red-100 text-red-600"
-                                                    : "bg-gray-100 text-gray-600"
+                                                ? "bg-red-100 text-red-600"
+                                                : "bg-gray-100 text-gray-600"
                                                 }`}
                                         >
                                             {col.cards.length}
@@ -615,7 +621,7 @@ const Board = () => {
                                     items={col.cards.map((c) => c.id)}
                                     strategy={verticalListSortingStrategy}
                                 >
-                                    <div className="flex-1 overflow-y-auto space-y-3 pr-2 pb-10">
+                                    <BoardColumn id={col.id}>
                                         {col.cards.map((card) => (
                                             <SortableTaskCard key={card.id} card={card} />
                                         ))}
@@ -623,7 +629,7 @@ const Board = () => {
                                             <PlusIcon className="w-4 h-4 mr-2" />
                                             Add item
                                         </button>
-                                    </div>
+                                    </BoardColumn>
                                 </SortableContext>
                             </div>
                         ))}
