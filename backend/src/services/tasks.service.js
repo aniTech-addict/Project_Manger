@@ -16,7 +16,7 @@ export const createTaskService = async (taskData, boardId) => {
 // ----------------------------------------------------------------------------------------
 
 export const listTaskService = async (listId) => {
-  const foundTask = Task.findById(listId);
+  const foundTask = await Task.findById(listId);
   if (!foundTask) {
     throw new ApiError(400, 'Task not found');
   }
@@ -24,7 +24,7 @@ export const listTaskService = async (listId) => {
 };
 
 export const deleteTaskService = async (taskId) => {
-  const deleteCount = Task.findByIdAndDelete(taskId);
+  const deleteCount = await Task.findByIdAndDelete(taskId);
   if (!deleteCount) {
     throw new ApiError(404, 'error: Task not found');
   }
