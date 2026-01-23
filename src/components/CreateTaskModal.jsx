@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, ModalContent, ModalHeader, ModalTitle, ModalFooter } from "./ui/modal";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -14,15 +14,33 @@ import {
 } from "./ui/icons";
 import { cn } from "../lib/utils";
 import { useCreateTask } from "../hooks/useBoards";
+import { useUpdateTask } from "../hooks/useTasks";
 
-export function CreateTaskModal({ isOpen, onClose, boardId }) {
+export function CreateTaskModal({ isOpen, onClose, boardId, taskToEdit = null }) {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [tags, setTags] = useState(["Frontend", "High Priority"]);
     const [newTag, setNewTag] = useState("");
-    const [status] = useState("created");
+    const [status, setStatus] = useState("created");
 
-    const { mutate: createTask, isPending } = useCreateTask();
+    const { mutate: createTask, isPending: isCreating } = useCreateTask();
+    const { mutate: updateTask, isPending: isUpdating } = useUpdateTask();
+
+    const isPending = isCreating || isUpdating;
+
+    useEffect(() => {
+        if (isOpen && taskToEdit) {
+            setTitle(taskToEdit.title);
+            setDescription(taskToEdit.description || "");
+            setTags(taskToEdit.tags || []);
+            setStatus(taskToEdit.status || "created");
+        } else if (isOpen && !taskToEdit) {
+            setTitle("");
+            setDescription("");
+            setTags(["Frontend", "High Priority"]);
+            setStatus("created");
+        }
+    }, [isOpen, taskToEdit]);
 
     const handleAddTag = (e) => {
         if (e.key === "Enter" && newTag.trim()) {
@@ -38,22 +56,33 @@ export function CreateTaskModal({ isOpen, onClose, boardId }) {
         setTags(tags.filter((tag) => tag !== tagToRemove));
     };
 
-    const handleCreate = () => {
-        if (!boardId) {
-            console.error("Board ID is missing");
-            return;
-        }
-        createTask(
-            { boardId, title, description, tags, status },
-            {
-                onSuccess: () => {
-                    onClose();
-                    setTitle("");
-                    setDescription("");
-                    setTags(["Frontend", "High Priority"]);
+    const handleSave = () => {
+        if (taskToEdit) {
+            updateTask(
+                { id: taskToEdit.id, title, description, tags, status },
+                {
+                    onSuccess: () => {
+                        onClose();
+                    }
                 }
+            );
+        } else {
+            if (!boardId) {
+                console.error("Board ID is missing");
+                return;
             }
-        );
+            createTask(
+                { boardId, title, description, tags, status },
+                {
+                    onSuccess: () => {
+                        onClose();
+                        setTitle("");
+                        setDescription("");
+                        setTags(["Frontend", "High Priority"]);
+                    }
+                }
+            );
+        }
     };
 
     return (
@@ -73,7 +102,7 @@ export function CreateTaskModal({ isOpen, onClose, boardId }) {
                     <div className="bg-blue-100/50 p-1.5 rounded-full">
                         <CheckCircleIcon className="h-5 w-5 text-blue-600" />
                     </div>
-                    <ModalTitle className="text-lg font-bold text-gray-900">Create Task</ModalTitle>
+                    <ModalTitle className="text-lg font-bold text-gray-900">{taskToEdit ? "Edit Task" : "Create Task"}</ModalTitle>
                 </div>
             </ModalHeader>
 
@@ -127,14 +156,17 @@ export function CreateTaskModal({ isOpen, onClose, boardId }) {
                     <div className="space-y-1.5">
                         <label className="text-xs font-semibold text-gray-700">Status</label>
                         <div className="relative group cursor-pointer">
-                            <div className="flex items-center justify-between h-9 w-full rounded-md border border-gray-200 bg-white px-3 text-sm shadow-sm hover:border-blue-400 transition-colors">
-                                <div className="flex items-center gap-2">
-                                    <div className="h-2 w-2 rounded-full bg-gray-400"></div>
-                                    <span className="font-medium text-gray-700 text-xs">Created</span>
-                                </div>
-                                {/* Gradient box mockup */}
-                                <div className="h-4 w-4 rounded bg-gradient-to-br from-teal-400 to-blue-500 opacity-80"></div>
-                            </div>
+                            <select
+                                value={status}
+                                onChange={(e) => setStatus(e.target.value)}
+                                className="flex items-center justify-between h-9 w-full rounded-md border border-gray-200 bg-white px-3 text-sm shadow-sm hover:border-blue-400 transition-colors appearance-none"
+                            >
+                                <option value="created">Created</option>
+                                <option value="in progress">In Progress</option>
+                                <option value="done">Done</option>
+                                <option value="bugs">Bugs</option>
+                                <option value="testing">Testing</option>
+                            </select>
                         </div>
                     </div>
 
@@ -217,8 +249,8 @@ export function CreateTaskModal({ isOpen, onClose, boardId }) {
                     <Button variant="ghost" onClick={onClose} size="sm" className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 h-9">
                         Cancel
                     </Button>
-                    <Button onClick={handleCreate} disabled={!title.trim() || isPending} size="sm" className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm h-9 px-4">
-                        {isPending ? "Creating..." : "Create Task"}
+                    <Button onClick={handleSave} disabled={!title.trim() || isPending} size="sm" className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm h-9 px-4">
+                        {isPending ? (taskToEdit ? "Saving..." : "Creating...") : (taskToEdit ? "Save Changes" : "Create Task")}
                     </Button>
                 </div>
             </ModalFooter>
