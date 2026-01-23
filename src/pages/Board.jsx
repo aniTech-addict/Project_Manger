@@ -91,65 +91,87 @@ const Board = () => {
         onDragEnd={handleDragEnd}
       >
         <div className="flex-1 overflow-x-auto overflow-y-hidden">
-          <div className="flex h-full p-6 space-x-6 min-w-[1000px]">
-            {columns.map((col) => (
-              <div
-                key={col.id}
-                className="flex-shrink-0 w-80 flex flex-col h-full"
-              >
-                {/* Column Header */}
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-2">
-                    <span
-                      className={`text-xs font-bold uppercase tracking-wider ${
-                        col.id === 'bugs' ? 'text-red-600' : 'text-gray-500'
-                      }`}
-                    >
-                      {col.title}
-                    </span>
-                    <span
-                      className={`flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-medium ${
-                        col.id === 'bugs'
-                          ? 'bg-red-100 text-red-600'
-                          : 'bg-gray-100 text-gray-600'
-                      }`}
-                    >
-                      {col.cards.length}
-                    </span>
+          <div className="flex h-full p-6 gap-6 min-w-[1000px]">
+            {columns.map((col, index) => (
+              <>
+                <div
+                  key={col.id}
+                  className="flex-shrink-0 w-80 flex flex-col h-full"
+                >
+                  {/* Column Header */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center space-x-2">
+                      <div
+                        className={`h-1 w-8 rounded-full mr-2 ${
+                          col.id === 'created'
+                            ? 'bg-blue-500'
+                            : col.id === 'in progress'
+                              ? 'bg-yellow-500'
+                              : col.id === 'done'
+                                ? 'bg-green-500'
+                                : col.id === 'bugs'
+                                  ? 'bg-red-500'
+                                  : col.id === 'testing'
+                                    ? 'bg-purple-500'
+                                    : 'bg-gray-500'
+                        }`}
+                      />
+                      <span
+                        className={`text-xs font-bold uppercase tracking-wider ${
+                          col.id === 'bugs' ? 'text-red-600' : 'text-gray-500'
+                        }`}
+                      >
+                        {col.title}
+                      </span>
+                      <span
+                        className={`flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                          col.id === 'bugs'
+                            ? 'bg-red-100 text-red-600'
+                            : 'bg-gray-100 text-gray-600'
+                        }`}
+                      >
+                        {col.cards.length}
+                      </span>
+                    </div>
+                    <div className="flex space-x-1">
+                      <button
+                        onClick={() => setIsCreateTaskModalOpen(true)}
+                        className="text-gray-400 hover:text-gray-600"
+                      >
+                        <PlusIcon className="h-4 w-4" />
+                      </button>
+                      <button className="text-gray-400 hover:text-gray-600">
+                        <MoreHorizontalIcon className="h-4 w-4" />
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex space-x-1">
-                    <button
-                      onClick={() => setIsCreateTaskModalOpen(true)}
-                      className="text-gray-400 hover:text-gray-600"
-                    >
-                      <PlusIcon className="h-4 w-4" />
-                    </button>
-                    <button className="text-gray-400 hover:text-gray-600">
-                      <MoreHorizontalIcon className="h-4 w-4" />
-                    </button>
-                  </div>
+
+                  {/* Cards Area */}
+                  <SortableContext
+                    id={col.id}
+                    items={col.cards.map((c) => c.id)}
+                    strategy={verticalListSortingStrategy}
+                  >
+                    <BoardColumn id={col.id}>
+                      {col.cards.map((card) => (
+                        <SortableTaskCard key={card.id} card={card} />
+                      ))}
+                      <button
+                        onClick={() => setIsCreateTaskModalOpen(true)}
+                        className="w-full py-2 flex items-center justify-center text-sm text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-md transition-colors border border-transparent hover:border-gray-200"
+                      >
+                        <PlusIcon className="w-4 h-4 mr-2" />
+                        Add item
+                      </button>
+                    </BoardColumn>
+                  </SortableContext>
                 </div>
 
-                {/* Cards Area */}
-                <SortableContext
-                  id={col.id}
-                  items={col.cards.map((c) => c.id)}
-                  strategy={verticalListSortingStrategy}
-                >
-                  <BoardColumn id={col.id}>
-                    {col.cards.map((card) => (
-                      <SortableTaskCard key={card.id} card={card} />
-                    ))}
-                    <button
-                      onClick={() => setIsCreateTaskModalOpen(true)}
-                      className="w-full py-2 flex items-center justify-center text-sm text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-md transition-colors border border-transparent hover:border-gray-200"
-                    >
-                      <PlusIcon className="w-4 h-4 mr-2" />
-                      Add item
-                    </button>
-                  </BoardColumn>
-                </SortableContext>
-              </div>
+                {/* Visual separator between columns */}
+                {index < columns.length - 1 && (
+                  <div className="flex-shrink-0 w-px h-full bg-gradient-to-b from-transparent via-gray-300 to-transparent" />
+                )}
+              </>
             ))}
           </div>
         </div>
