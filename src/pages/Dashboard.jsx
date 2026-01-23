@@ -2,12 +2,18 @@ import React from "react";
 import { Button } from "../components/ui/button";
 import { PlusIcon, GridIcon } from "../components/ui/icons";
 import { CreateBoardModal } from "../components/CreateBoardModal";
-import { projects } from "../data/dashboard-data";
+import { useBoards } from "../hooks/useBoards";
 import { ProjectCard } from "../components/dashboard/ProjectCard";
 import { NewProjectCard } from "../components/dashboard/NewProjectCard";
 
+// import { projects } from "../data/dashboard-data"; // Remove mock data import if not needed, or keep for reference but don't use
+
 const Dashboard = () => {
     const [isCreateModalOpen, setIsCreateModalOpen] = React.useState(false);
+    const { data: boards = [], isLoading, error } = useBoards();
+
+    if (isLoading) return <div className="p-8 text-center text-gray-500">Loading projects...</div>;
+    if (error) return <div className="p-8 text-center text-red-500">Error loading projects: {error.message}</div>;
 
     return (
         <div className="max-w-7xl mx-auto">
@@ -58,8 +64,19 @@ const Dashboard = () => {
 
             {/* Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {projects.map((project) => (
-                    <ProjectCard key={project.id} project={project} />
+                {boards.map((board) => (
+                    <ProjectCard
+                        key={board._id}
+                        project={{
+                            id: board._id,
+                            title: board.title,
+                            description: board.description,
+                            tags: board.tags.map(tag => ({ label: tag, variant: 'secondary' })),
+                            users: [], // Mock or fetch users if available
+                            updated: new Date(board.updatedAt).toLocaleDateString(),
+                            iconColor: "bg-blue-100 text-blue-600"
+                        }}
+                    />
                 ))}
 
                 {/* Create New Project Card */}

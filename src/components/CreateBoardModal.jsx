@@ -6,6 +6,7 @@ import { Textarea } from "./ui/textarea";
 import { Badge } from "./ui/badge";
 import { CloseIcon } from "./ui/icons";
 import { cn } from "../lib/utils";
+import { useCreateBoard } from "../hooks/useBoards";
 
 export function CreateBoardModal({ isOpen, onClose }) {
     const [title, setTitle] = useState("");
@@ -13,6 +14,8 @@ export function CreateBoardModal({ isOpen, onClose }) {
     const [tags, setTags] = useState(["Engineering", "Roadmap"]);
     const [newTag, setNewTag] = useState("");
     const [visibility, setVisibility] = useState("private"); // 'private' or 'internal'
+
+    const { mutate: createBoard, isPending } = useCreateBoard();
 
     const handleAddTag = (e) => {
         if (e.key === "Enter" && newTag.trim()) {
@@ -29,9 +32,17 @@ export function CreateBoardModal({ isOpen, onClose }) {
     };
 
     const handleCreate = () => {
-        // Here you would call an API or parent handler
-        console.log({ title, description, tags, visibility });
-        onClose();
+        createBoard(
+            { title, description, tags, status: 'Active' },
+            {
+                onSuccess: () => {
+                    onClose();
+                    setTitle("");
+                    setDescription("");
+                    setTags(["Engineering", "Roadmap"]);
+                }
+            }
+        );
     };
 
     return (
@@ -168,7 +179,7 @@ export function CreateBoardModal({ isOpen, onClose }) {
                     Cancel
                 </Button>
                 <Button onClick={handleCreate} disabled={!title.trim()} size="sm" className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm h-9 px-4">
-                    Create board
+                    {isPending ? "Creating..." : "Create board"}
                 </Button>
             </ModalFooter>
         </Modal>

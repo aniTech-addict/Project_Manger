@@ -13,13 +13,16 @@ import {
     SearchIcon
 } from "./ui/icons";
 import { cn } from "../lib/utils";
+import { useCreateTask } from "../hooks/useBoards";
 
-export function CreateTaskModal({ isOpen, onClose }) {
+export function CreateTaskModal({ isOpen, onClose, boardId }) {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [tags, setTags] = useState(["Frontend", "High Priority"]);
     const [newTag, setNewTag] = useState("");
     const [status] = useState("created");
+
+    const { mutate: createTask, isPending } = useCreateTask();
 
     const handleAddTag = (e) => {
         if (e.key === "Enter" && newTag.trim()) {
@@ -36,8 +39,21 @@ export function CreateTaskModal({ isOpen, onClose }) {
     };
 
     const handleCreate = () => {
-        console.log({ title, description, tags, status });
-        onClose();
+        if (!boardId) {
+            console.error("Board ID is missing");
+            return;
+        }
+        createTask(
+            { boardId, title, description, tags, status },
+            {
+                onSuccess: () => {
+                    onClose();
+                    setTitle("");
+                    setDescription("");
+                    setTags(["Frontend", "High Priority"]);
+                }
+            }
+        );
     };
 
     return (
@@ -201,8 +217,8 @@ export function CreateTaskModal({ isOpen, onClose }) {
                     <Button variant="ghost" onClick={onClose} size="sm" className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 h-9">
                         Cancel
                     </Button>
-                    <Button onClick={handleCreate} disabled={!title.trim()} size="sm" className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm h-9 px-4">
-                        Create Task
+                    <Button onClick={handleCreate} disabled={!title.trim() || isPending} size="sm" className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm h-9 px-4">
+                        {isPending ? "Creating..." : "Create Task"}
                     </Button>
                 </div>
             </ModalFooter>

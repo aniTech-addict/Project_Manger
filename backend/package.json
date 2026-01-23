@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "dev": "nodemon src/index.js",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "start": "docker compose up -d && nodemon src/index.js"
   },

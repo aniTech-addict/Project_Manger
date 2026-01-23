@@ -3,17 +3,17 @@ import { Button } from "../ui/button";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { ShareIcon, PlusIcon } from "../ui/icons";
 
-export const BoardHeader = ({ onNewTaskClick }) => {
+export const BoardHeader = ({ title, description, onNewTaskClick }) => {
     return (
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between p-6 border-b border-gray-200">
             <div>
                 <div className="flex items-center text-sm text-gray-500 space-x-2 mb-1">
-                    <span>Enterprise SaaS</span>
+                    <span>Projects</span>
                     <span>/</span>
-                    <span className="font-medium text-gray-900">Sprint 24 Board</span>
+                    <span className="font-medium text-gray-900">{title || 'Board'}</span>
                 </div>
                 <h1 className="text-2xl font-bold text-gray-900">
-                    Active Development Cycle
+                    {description || title || 'Project Board'}
                 </h1>
             </div>
 

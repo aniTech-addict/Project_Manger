@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import {
     DndContext,
     closestCorners,
@@ -15,8 +16,13 @@ import { TaskCard, SortableTaskCard } from "../components/board/TaskCard";
 import { BoardColumn } from "../components/board/BoardColumn";
 import { BoardHeader } from "../components/board/BoardHeader";
 import { useKanbanBoard } from "../hooks/useKanbanBoard";
+import { useBoard, useBoardTasks } from "../hooks/useBoards";
 
 const Board = () => {
+    const { id } = useParams();
+    const { data: board, isLoading: boardLoading } = useBoard(id);
+    const { data: tasks = [], isLoading: tasksLoading } = useBoardTasks(id);
+
     const {
         columns,
         activeId,
@@ -24,9 +30,11 @@ const Board = () => {
         handleDragStart,
         handleDragOver,
         handleDragEnd
-    } = useKanbanBoard();
+    } = useKanbanBoard(tasks);
 
     const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] = useState(false);
+
+    if (boardLoading || tasksLoading) return <div className="p-8 text-center text-gray-500">Loading board...</div>;
 
     const dropAnimation = {
         sideEffects: defaultDropAnimationSideEffects({
@@ -46,7 +54,11 @@ const Board = () => {
 
     return (
         <div className="flex flex-col h-full bg-white">
-            <BoardHeader onNewTaskClick={() => setIsCreateTaskModalOpen(true)} />
+            <BoardHeader
+                title={board?.title}
+                description={board?.description}
+                onNewTaskClick={() => setIsCreateTaskModalOpen(true)}
+            />
 
             <DndContext
                 sensors={sensors}
@@ -123,7 +135,11 @@ const Board = () => {
                 </DragOverlay>
             </DndContext>
 
-            <CreateTaskModal isOpen={isCreateTaskModalOpen} onClose={() => setIsCreateTaskModalOpen(false)} />
+            <CreateTaskModal
+                isOpen={isCreateTaskModalOpen}
+                onClose={() => setIsCreateTaskModalOpen(false)}
+                boardId={id}
+            />
         </div>
     );
 };

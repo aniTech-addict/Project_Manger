@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
     useSensor,
     useSensors,
@@ -11,9 +11,33 @@ import {
 } from "@dnd-kit/sortable";
 import { initialColumns } from "../data/board-data";
 
-export const useKanbanBoard = () => {
+export const useKanbanBoard = (tasks = []) => {
     const [columns, setColumns] = useState(initialColumns);
     const [activeId, setActiveId] = useState(null);
+
+    useEffect(() => {
+        if (!tasks.length) return;
+
+        const newColumns = [
+            { id: 'created', title: 'To Do', cards: [] },
+            { id: 'in progress', title: 'In Progress', cards: [] },
+            { id: 'done', title: 'Done', cards: [] },
+            { id: 'bugs', title: 'Bugs', cards: [] },
+            { id: 'testing', title: 'Testing', cards: [] }
+        ];
+
+        tasks.forEach(task => {
+            const col = newColumns.find(c => c.id === task.status) || newColumns[0];
+            col.cards.push({
+                id: task._id,
+                title: task.title,
+                description: task.description,
+                tags: task.tags?.map(t => ({ label: t, variant: 'default' })) || []
+            });
+        });
+
+        setColumns(newColumns);
+    }, [tasks]);
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
