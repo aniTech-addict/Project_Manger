@@ -5,7 +5,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import {
     SearchIcon,
     BellIcon,
-    PlusIcon,
     GridIcon,
     SettingsIcon,
     LayoutTemplateIcon,
@@ -87,10 +86,7 @@ const Layout = () => {
                             <BellIcon className="h-5 w-5" />
                             <span className="absolute top-2 right-2 h-2 w-2 bg-red-500 rounded-full border border-white"></span>
                         </Button>
-                        <Button className="bg-blue-600 hover:bg-blue-700 shadow-sm">
-                            <PlusIcon className="mr-2 h-4 w-4" />
-                            New Project
-                        </Button>
+
                     </div>
                 </header>
 

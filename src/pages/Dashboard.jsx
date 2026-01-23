@@ -4,6 +4,8 @@ import { Badge } from "../components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { PlusIcon, MoreHorizontalIcon, GridIcon } from "../components/ui/icons";
 import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { CreateBoardModal } from "../components/CreateBoardModal";
 
 const projects = [
     {
@@ -96,6 +98,8 @@ const projects = [
 ];
 
 const Dashboard = () => {
+    const [isCreateModalOpen, setIsCreateModalOpen] = React.useState(false);
+
     return (
         <div className="max-w-7xl mx-auto">
             {/* Header Section */}
@@ -120,7 +124,16 @@ const Dashboard = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
                         </svg>
                     </Button>
-                    <div className="flex bg-white rounded-md border border-gray-200 p-0.5">
+
+                    <Button
+                        onClick={() => setIsCreateModalOpen(true)}
+                        className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm flex items-center"
+                    >
+                        <PlusIcon className="mr-2 h-4 w-4" />
+                        New project
+                    </Button>
+
+                    <div className="flex bg-white rounded-md border border-gray-200 p-0.5 ml-2">
                         <button className="p-1.5 rounded bg-gray-100 text-gray-900 shadow-sm">
                             <GridIcon className="h-4 w-4" />
                         </button>
@@ -180,13 +193,18 @@ const Dashboard = () => {
                 ))}
 
                 {/* Create New Project Card */}
-                <button className="h-full min-h-[250px] border-2 border-dashed border-gray-200 rounded-lg flex flex-col items-center justify-center text-gray-400 hover:border-blue-400 hover:text-blue-500 hover:bg-blue-50/10 transition-all cursor-pointer group">
+                <button
+                    onClick={() => setIsCreateModalOpen(true)}
+                    className="h-full min-h-[250px] border-2 border-dashed border-gray-200 rounded-lg flex flex-col items-center justify-center text-gray-400 hover:border-blue-400 hover:text-blue-500 hover:bg-blue-50/10 transition-all cursor-pointer group"
+                >
                     <div className="h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center mb-3 group-hover:bg-blue-100 transition-colors">
                         <PlusIcon className="h-6 w-6 group-hover:text-blue-600" />
                     </div>
                     <span className="font-medium text-sm">Create New Project</span>
                 </button>
             </div>
+
+            <CreateBoardModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
         </div>
     );
 };

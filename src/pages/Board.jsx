@@ -27,6 +27,7 @@ import {
     ShareIcon,
 } from "../components/ui/icons";
 import { Link, useNavigate } from "react-router-dom";
+import { CreateTaskModal } from "../components/CreateTaskModal";
 
 const initialColumns = [
     {
@@ -227,6 +228,7 @@ const BoardColumn = ({ id, children }) => {
 const Board = () => {
     const [columns, setColumns] = useState(initialColumns);
     const [activeId, setActiveId] = useState(null);
+    const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] = useState(false);
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -568,6 +570,14 @@ const Board = () => {
                         <ShareIcon className="mr-2 h-4 w-4" />
                         Share
                     </Button>
+                    <Button
+                        size="sm"
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                        onClick={() => setIsCreateTaskModalOpen(true)}
+                    >
+                        <PlusIcon className="mr-2 h-4 w-4" />
+                        New Task
+                    </Button>
                 </div>
             </div>
 
@@ -625,7 +635,10 @@ const Board = () => {
                                         {col.cards.map((card) => (
                                             <SortableTaskCard key={card.id} card={card} />
                                         ))}
-                                        <button className="w-full py-2 flex items-center justify-center text-sm text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-md transition-colors border border-transparent hover:border-gray-200">
+                                        <button
+                                            onClick={() => setIsCreateTaskModalOpen(true)}
+                                            className="w-full py-2 flex items-center justify-center text-sm text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-md transition-colors border border-transparent hover:border-gray-200"
+                                        >
                                             <PlusIcon className="w-4 h-4 mr-2" />
                                             Add item
                                         </button>
@@ -644,6 +657,8 @@ const Board = () => {
                     ) : null}
                 </DragOverlay>
             </DndContext>
+
+            <CreateTaskModal isOpen={isCreateTaskModalOpen} onClose={() => setIsCreateTaskModalOpen(false)} />
         </div>
     );
 };
