@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "../components/ui/button";
 import { PlusIcon, GridIcon } from "../components/ui/icons";
 import { CreateBoardModal } from "../components/CreateBoardModal";
-import { useBoards } from "../hooks/useBoards";
+import { useBoards, useDeleteBoard } from "../hooks/useBoards";
 import { ProjectCard } from "../components/dashboard/ProjectCard";
 import { NewProjectCard } from "../components/dashboard/NewProjectCard";
 
@@ -10,7 +10,44 @@ import { NewProjectCard } from "../components/dashboard/NewProjectCard";
 
 const Dashboard = () => {
     const [isCreateModalOpen, setIsCreateModalOpen] = React.useState(false);
+    const [selectedBoard, setSelectedBoard] = React.useState(null);
     const { data: boards = [], isLoading, error } = useBoards();
+    const { mutate: deleteBoard } = useDeleteBoard();
+
+    const handleCreateOpen = () => {
+        setSelectedBoard(null);
+        setIsCreateModalOpen(true);
+    };
+
+    const handleEditStart = (board) => {
+        // board has the structure passed to ProjectCard, we need to make sure it matches what CreateBoardModal expects. 
+        // ProjectCard receives specialized props.
+        // But here loop passes the whole board object to ProjectCard inside `project`. 
+        // Wait, current ProjectCard usage: 
+        // project={{ id: board._id, title: board.title, ... }}
+        // I should stick to passing the raw board object if possible or reconstruct it.
+        // Let's pass the raw board to valid Edit.
+
+        // Actually the `board` object from `boards.map` has `_id`. 
+        // The modal expects `id` for update? `useUpdateBoard` calls `api.patch('/boards/${id}'...`. 
+        // Check `boards.api.js`: updateBoard takes `{ id, ...data }`.
+
+        // Let's ensure consistency.
+        setSelectedBoard({
+            id: board._id,
+            title: board.title,
+            description: board.description,
+            tags: board.tags,
+            // add other fields if necessary
+        });
+        setIsCreateModalOpen(true);
+    };
+
+    const handleDelete = (boardId) => {
+        if (window.confirm("Are you sure you want to delete this board?")) {
+            deleteBoard(boardId);
+        }
+    };
 
     if (isLoading) return <div className="p-8 text-center text-gray-500">Loading projects...</div>;
     if (error) return <div className="p-8 text-center text-red-500">Error loading projects: {error.message}</div>;
@@ -41,7 +78,7 @@ const Dashboard = () => {
                     </Button>
 
                     <Button
-                        onClick={() => setIsCreateModalOpen(true)}
+                        onClick={handleCreateOpen}
                         className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm flex items-center"
                     >
                         <PlusIcon className="mr-2 h-4 w-4" />
@@ -76,14 +113,20 @@ const Dashboard = () => {
                             updated: new Date(board.updatedAt).toLocaleDateString(),
                             iconColor: "bg-blue-100 text-blue-600"
                         }}
+                        onEdit={() => handleEditStart(board)}
+                        onDelete={() => handleDelete(board._id)}
                     />
                 ))}
 
                 {/* Create New Project Card */}
-                <NewProjectCard onClick={() => setIsCreateModalOpen(true)} />
+                <NewProjectCard onClick={handleCreateOpen} />
             </div>
 
-            <CreateBoardModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
+            <CreateBoardModal
+                isOpen={isCreateModalOpen}
+                onClose={() => setIsCreateModalOpen(false)}
+                boardToEdit={selectedBoard}
+            />
         </div>
     );
 };

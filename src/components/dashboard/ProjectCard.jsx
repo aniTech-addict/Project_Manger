@@ -1,13 +1,51 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { MoreHorizontalIcon } from "../ui/icons";
 
-export const ProjectCard = ({ project }) => {
+export const ProjectCard = ({ project, onEdit, onDelete }) => {
+    const [showMenu, setShowMenu] = useState(false);
+    const menuRef = useRef(null);
+
+    const toggleMenu = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setShowMenu(!showMenu);
+    };
+
+    const handleEdit = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setShowMenu(false);
+        if (onEdit) onEdit();
+    };
+
+    const handleDelete = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setShowMenu(false);
+        if (onDelete) onDelete();
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setShowMenu(false);
+            }
+        };
+
+        if (showMenu) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [showMenu]);
+
     return (
-        <Link to={`/projects/${project.id}`} className="block group">
+        <Link to={`/projects/${project.id}`} className="block group relative">
             <Card className="h-full hover:shadow-md transition-shadow duration-200 border-gray-100 hover:border-gray-200">
                 <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
                     <div className={`h-10 w-10 rounded-lg flex items-center justify-center ${project.iconColor}`}>
@@ -16,9 +54,31 @@ export const ProjectCard = ({ project }) => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                         </svg>
                     </div>
-                    <button className="text-gray-400 hover:text-gray-600">
-                        <MoreHorizontalIcon className="h-5 w-5" />
-                    </button>
+                    <div className="relative z-10" ref={menuRef}>
+                        <button
+                            onClick={toggleMenu}
+                            className="text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-100 transition-colors"
+                        >
+                            <MoreHorizontalIcon className="h-5 w-5" />
+                        </button>
+
+                        {showMenu && (
+                            <div className="absolute right-0 mt-1 w-32 bg-white rounded-md shadow-lg border border-gray-200 py-1 text-sm z-20">
+                                <button
+                                    onClick={handleEdit}
+                                    className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    onClick={handleDelete}
+                                    className="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 hover:text-red-700"
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </CardHeader>
                 <CardContent className="pt-4">
                     <CardTitle className="mb-2 text-base">{project.title}</CardTitle>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, ModalContent, ModalHeader, ModalTitle, ModalDescription, ModalFooter } from "./ui/modal";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -6,16 +6,37 @@ import { Textarea } from "./ui/textarea";
 import { Badge } from "./ui/badge";
 import { CloseIcon } from "./ui/icons";
 import { cn } from "../lib/utils";
-import { useCreateBoard } from "../hooks/useBoards";
+import { useCreateBoard, useUpdateBoard } from "../hooks/useBoards";
 
-export function CreateBoardModal({ isOpen, onClose }) {
+export function CreateBoardModal({ isOpen, onClose, boardToEdit = null }) {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [tags, setTags] = useState(["Engineering", "Roadmap"]);
     const [newTag, setNewTag] = useState("");
     const [visibility, setVisibility] = useState("private"); // 'private' or 'internal'
 
-    const { mutate: createBoard, isPending } = useCreateBoard();
+    const { mutate: createBoard, isPending: isCreating } = useCreateBoard();
+    const { mutate: updateBoard, isPending: isUpdating } = useUpdateBoard();
+
+    const isPending = isCreating || isUpdating;
+
+    useEffect(() => {
+        if (isOpen && boardToEdit) {
+            setTitle(boardToEdit.title);
+            setDescription(boardToEdit.description || "");
+            setTags(boardToEdit.tags || []);
+            // Assuming visibility is not part of the board object yet based on the previous file content, 
+            // but if it were, we would set it here. Defaulting to 'private' or whatever calls for it.
+            // checking dashboard-data structure in my mind... usually it might be there.
+        } else if (isOpen && !boardToEdit) {
+            // Reset for create mode
+            setTitle("");
+            setDescription("");
+            setTags(["Engineering", "Roadmap"]);
+            setNewTag("");
+            setVisibility("private");
+        }
+    }, [isOpen, boardToEdit]);
 
     const handleAddTag = (e) => {
         if (e.key === "Enter" && newTag.trim()) {
@@ -31,26 +52,37 @@ export function CreateBoardModal({ isOpen, onClose }) {
         setTags(tags.filter((tag) => tag !== tagToRemove));
     };
 
-    const handleCreate = () => {
-        createBoard(
-            { title, description, tags, status: 'Active' },
-            {
-                onSuccess: () => {
-                    onClose();
-                    setTitle("");
-                    setDescription("");
-                    setTags(["Engineering", "Roadmap"]);
+    const handleSave = () => {
+        if (boardToEdit) {
+            updateBoard(
+                { id: boardToEdit.id, title, description, tags },
+                {
+                    onSuccess: () => {
+                        onClose();
+                    }
                 }
-            }
-        );
+            );
+        } else {
+            createBoard(
+                { title, description, tags, status: 'Active' },
+                {
+                    onSuccess: () => {
+                        onClose();
+                        setTitle("");
+                        setDescription("");
+                        setTags(["Engineering", "Roadmap"]);
+                    }
+                }
+            );
+        }
     };
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} className="sm:max-w-[480px] rounded-lg">
             <ModalHeader className="px-5 pt-5 pb-0 text-left">
-                <ModalTitle className="text-lg font-bold">Create new board</ModalTitle>
+                <ModalTitle className="text-lg font-bold">{boardToEdit ? "Edit board" : "Create new board"}</ModalTitle>
                 <ModalDescription className="text-left mt-1 text-xs text-gray-500">
-                    A board helps you track tasks and manage workflows.
+                    {boardToEdit ? "Update the details of your board." : "A board helps you track tasks and manage workflows."}
                 </ModalDescription>
             </ModalHeader>
 
@@ -178,8 +210,8 @@ export function CreateBoardModal({ isOpen, onClose }) {
                 <Button variant="ghost" onClick={onClose} size="sm" className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 h-9">
                     Cancel
                 </Button>
-                <Button onClick={handleCreate} disabled={!title.trim()} size="sm" className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm h-9 px-4">
-                    {isPending ? "Creating..." : "Create board"}
+                <Button onClick={handleSave} disabled={!title.trim()} size="sm" className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm h-9 px-4">
+                    {isPending ? (boardToEdit ? "Saving..." : "Creating...") : (boardToEdit ? "Save changes" : "Create board")}
                 </Button>
             </ModalFooter>
         </Modal>
