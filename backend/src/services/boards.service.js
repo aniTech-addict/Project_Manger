@@ -8,14 +8,14 @@ export const createBoardService = async (board) => {
 
 export const listBoardService = async (boardId) => {
   const foundBoard = await Board.findById(boardId);
-  if (!foundBoard) {
+  if (!foundBoard || foundBoard.isDeleted) {
     throw new ApiError(404, 'Board Not Found');
   }
   return foundBoard;
 };
 
 export const listBoardsService = async () => {
-  const boards = await Board.find();
+  const boards = await Board.find({ isDeleted: false });
   if (!boards) {
     throw new ApiError(404, 'No Boards Found');
   }
