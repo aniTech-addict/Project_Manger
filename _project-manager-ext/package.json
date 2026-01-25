@@ -12,6 +12,16 @@
   "activationEvents": [],
   "main": "./extension.js",
   "contributes": {
+    "views": {
+      "explorer": [
+        {
+          "type": "webview",
+          "id": "project-manager-sidebar-view",
+          "name": "Project Manager",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "project-manager-.helloWorld",
