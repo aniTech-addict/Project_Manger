@@ -30,6 +30,7 @@
     ]
   },
   "scripts": {
+    "build": "npm run build --prefix webview-ui",
     "lint": "eslint .",
     "pretest": "npm run lint",
     "test": "vscode-test"

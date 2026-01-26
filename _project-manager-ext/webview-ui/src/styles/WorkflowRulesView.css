@@ -1,0 +1,150 @@
+/* Workflow & Rules Container */
+.wr-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: #1e1e1e;
+    /* Standard dark bg */
+    color: #e0e0e0;
+    position: relative;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    animation: fadeIn 0.4s ease-out;
+    align-items: center;
+    overflow-y: auto;
+}
+
+.wr-header {
+    text-align: center;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+}
+
+.wr-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #fff;
+    /* Solid white */
+}
+
+.wr-subtitle {
+    font-size: 0.9rem;
+    color: #888;
+}
+
+/* Form Layout */
+.wr-form {
+    max-width: 600px;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-bottom: 3rem;
+}
+
+.wr-section {
+    background: #252526;
+    padding: 1.5rem;
+    border-radius: 8px;
+    /* Standard radius */
+    border: 1px solid #333;
+    box-shadow: none;
+    /* No shadow */
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.section-header {
+    border-bottom: 1px solid #333;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #e0e0e0;
+    /* Teal accent */
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.section-title.rules {
+    color: #e0e0e0;
+    /* consistent color */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #ccc;
+    margin-left: 2px;
+}
+
+.form-input,
+.form-textarea {
+    background: #1e1e1e;
+    /* Darker input against the section bg */
+    border: 1px solid #3c3c3c;
+    border-radius: 4px;
+    padding: 10px 12px;
+    color: #fff;
+    font-family: inherit;
+    font-size: 0.9rem;
+    transition: border-color 0.2s;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: #007fd4;
+    /* VS Code Blue focus */
+    background: #2a2a2a;
+    box-shadow: none;
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.word-count {
+    font-size: 0.75rem;
+    color: #666;
+    text-align: right;
+    margin-top: 4px;
+}
+
+.word-count.limit-reached {
+    color: #d65d5d;
+}
+
+/* Submit Button */
+.submit-wr-btn {
+    background: #0e639c;
+    /* Solid VS Code Blue */
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    box-shadow: none;
+    margin-top: 1rem;
+}
+
+.submit-wr-btn:hover {
+    background: #1177bb;
+    transform: none;
+    box-shadow: none;
+}

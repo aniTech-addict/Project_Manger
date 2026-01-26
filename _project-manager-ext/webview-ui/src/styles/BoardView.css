@@ -1,0 +1,292 @@
+/* Board View Container */
+.board-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 1rem;
+    gap: 1.5rem;
+    background: transparent;
+    color: var(--text-main);
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Toolbar */
+.board-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: rgba(45, 45, 45, 0.4);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.toolbar-left,
+.toolbar-right {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.icon-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+    transform: translateY(-1px);
+}
+
+.icon-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Recent Tasks Wrapper - remove dropdown and keep simple active state */
+.toolbar-left .icon-btn.active {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+/* Board Columns Grid - Vertical Stack (Accordion) */
+.board-grid {
+    display: flex;
+    flex-direction: column;
+    /* Stack vertically */
+    gap: 1.5rem;
+    overflow-y: auto;
+    height: 100%;
+    padding-bottom: 2rem;
+    padding-right: 0.5rem;
+}
+
+/* Scrollbar for the main grid area */
+.board-grid::-webkit-scrollbar {
+    width: 6px;
+}
+
+.board-grid::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.board-column {
+    width: 100%;
+    background: rgba(30, 30, 30, 0.4);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Allow height to animate if we wanted, but auto is fine */
+}
+
+/* Collapsed State Styles - Accordion style */
+.board-column.collapsed {
+    padding-bottom: 0;
+    /* Tighten up when collapsed */
+    background: rgba(30, 30, 30, 0.2);
+    /* Sligthly more transparent */
+}
+
+.board-column.collapsed:hover {
+    background: rgba(40, 40, 40, 0.4);
+}
+
+.board-column.collapsed .column-header {
+    border-bottom-color: transparent;
+    /* Hide border separator when collapsed */
+    margin-bottom: 0;
+}
+
+.board-column.collapsed .task-list {
+    display: none;
+}
+
+/* Normal Header */
+.column-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    user-select: none;
+    transition: border-bottom-color 0.2s;
+}
+
+
+
+.column-header:hover .column-title {
+    color: #fff;
+}
+
+.column-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.toggle-icon {
+    display: flex;
+    align-items: center;
+    color: var(--text-muted);
+    transition: color 0.2s;
+}
+
+.toggle-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+.column-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.2s;
+}
+
+.task-count {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.column-actions {
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.column-actions:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.column-actions svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Tasks List */
+.task-list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-right: 4px;
+    animation: fadeIn 0.2s ease-out;
+}
+
+/* Scrollbar styling */
+.task-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.task-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+/* Task Card */
+.task-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.task-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.task-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: transparent;
+    transition: background 0.2s;
+}
+
+.task-card:hover::before {
+    background: #646cff;
+    /* Example accent color */
+}
+
+.task-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--text-main);
+}
+
+.task-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    flex-wrap: wrap;
+    /* Allow wrapping for many tags */
+    gap: 0.5rem;
+}
+
+.task-tag {
+    background: rgba(100, 108, 255, 0.1);
+    color: #646cff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.task-id {
+    margin-left: auto;
+    /* Push ID to the right if tags don't fill */
+    opacity: 0.7;
+}
+
+/* Specific Column Colors (subtle borders/accents) */
+.col-todo .column-header {
+    border-bottom-color: rgba(255, 99, 71, 0.3);
+}
+
+.col-progress .column-header {
+    border-bottom-color: rgba(255, 215, 0, 0.3);
+}
+
+.col-done .column-header {
+    border-bottom-color: rgba(60, 179, 113, 0.3);
+}

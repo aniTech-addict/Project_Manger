@@ -1,15 +1,35 @@
 import { useState } from 'react'
-import './App.css'
+import './styles/App.css'
+import BoardView from './pages/BoardView'
+import AIChatView from './pages/AIChatView'
+import AddTaskView from './pages/AddTaskView'
+import WorkflowRulesView from './pages/WorkflowRulesView'
+import { initialColumns } from './data/initialData'
 
 function App() {
+    const [view, setView] = useState('create');
     const [isEditMode, setIsEditMode] = useState(false);
     const [projectName, setProjectName] = useState('');
     const [description, setDescription] = useState('');
 
+    const [columns, setColumns] = useState(initialColumns);
+
+    const handleAddTask = (newTask) => {
+        setColumns(prevColumns => prevColumns.map(col => {
+            if (col.id === newTask.status) {
+                return {
+                    ...col,
+                    tasks: [...(col.tasks || []), newTask]
+                };
+            }
+            return col;
+        }));
+        setView('board');
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const action = isEditMode ? 'editProject' : 'createProject';
-        // Send message to VS Code extension
         if (window.acquireVsCodeApi) {
             const vscode = window.acquireVsCodeApi();
             vscode.postMessage({
@@ -19,7 +39,25 @@ function App() {
         } else {
             console.log(`Action: ${action}`, { projectName, description });
         }
+        // Switch to Board View
+        setView('board');
     };
+
+    if (view === 'board') {
+        return <BoardView onViewChange={setView} columns={columns} />;
+    }
+
+    if (view === 'ai-chat') {
+        return <AIChatView onBack={() => setView('board')} />;
+    }
+
+    if (view === 'add-task') {
+        return <AddTaskView onAddTask={handleAddTask} onBack={() => setView('board')} />;
+    }
+
+    if (view === 'workflow-rules') {
+        return <WorkflowRulesView onBack={() => setView('board')} />;
+    }
 
     return (
         <div className="container">

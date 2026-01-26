@@ -1,0 +1,117 @@
+/* Add Task Container */
+.add-task-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: #1e1e1e;
+    color: #e0e0e0;
+    position: relative;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    animation: fadeIn 0.3s ease-out;
+    justify-content: center;
+    /* Center vertically */
+    align-items: center;
+}
+
+.add-task-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.add-task-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: #fff;
+}
+
+.add-task-subtitle {
+    font-size: 0.9rem;
+    color: #888;
+}
+
+/* Form Styling */
+.task-form {
+    max-width: 450px;
+    /* Slightly narrower for nicer fit */
+    margin: 0 auto;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #ccc;
+    margin-left: 4px;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    background: #252526;
+    border: 1px solid #3c3c3c;
+    border-radius: 6px;
+    padding: 10px 12px;
+    color: #e0e0e0;
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: border-color 0.2s;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: #007fd4;
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Submit Button */
+.submit-task-btn {
+    margin-top: 1rem;
+    background: #0e639c;
+    /* VS Code Blue */
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.submit-task-btn:hover {
+    background: #1177bb;
+}
+
+/* Back Button (Similar to other views) */
+.back-btn-corner {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: transparent;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    padding: 8px;
+    transition: color 0.2s;
+}
+
+.back-btn-corner:hover {
+    color: #fff;
+}

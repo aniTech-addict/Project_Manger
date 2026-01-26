@@ -1,0 +1,331 @@
+/* AI Chat Container - Full screen layout */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: #1e1e1e;
+    /* Consistent with VS Code dark theme default */
+    color: #e0e0e0;
+    position: relative;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Back Button */
+.back-btn {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: transparent;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    padding: 8px;
+    z-index: 20;
+    transition: color 0.2s;
+}
+
+.back-btn:hover {
+    color: #fff;
+}
+
+/* Recent Sessions (Top Bar) */
+.recent-sessions-container {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: #1b1b1b;
+    margin-top: 50px;
+}
+
+.recent-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #aeaeae;
+    text-transform: uppercase;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    user-select: none;
+}
+
+.recent-header:hover {
+    color: #e0e0e0;
+}
+
+.header-icon {
+    color: #888;
+}
+
+.recent-list {
+    background: #181818;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.recent-list.expanded {
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+/* Custom Scrollbar for list */
+.recent-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.recent-list::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 3px;
+}
+
+.session-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px 16px;
+    background: transparent;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+.session-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.session-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.session-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    background: #888;
+    /* Neutral dot */
+    border-radius: 50%;
+}
+
+.session-title {
+    font-size: 0.9rem;
+    color: #e0e0e0;
+    font-weight: 500;
+}
+
+.session-sub {
+    font-size: 0.8rem;
+    color: #888;
+    padding-left: 14px;
+}
+
+.session-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.session-icon {
+    color: #666;
+    transition: color 0.2s;
+}
+
+.session-icon:hover {
+    color: #d65d5d;
+    /* Red for delete */
+}
+
+.session-meta {
+    font-size: 0.75rem;
+    color: #666;
+}
+
+.show-more {
+    text-align: center;
+    padding: 8px;
+    font-size: 0.8rem;
+    color: #888;
+    cursor: pointer;
+    background: #181818;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.show-more:hover {
+    color: #ccc;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+/* Main Content (Center Placeholder) */
+.chat-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 2rem;
+    padding-bottom: 100px;
+    overflow-y: auto;
+    /* justify-content: center; REMOVED to allow top start */
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+    opacity: 0.8;
+    margin: auto;
+    /* Center the empty state vertically */
+}
+
+/* ... (rest of empty state) ... */
+.empty-icon {
+    position: relative;
+    color: #ccc;
+    margin-bottom: 0.5rem;
+}
+
+.sparkle {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    color: #ffd700;
+    font-size: 1.2rem;
+}
+
+.empty-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0;
+    color: #fff;
+}
+
+.empty-desc {
+    color: #888;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.empty-link {
+    color: #4daafc;
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.empty-link:hover {
+    text-decoration: underline;
+}
+
+/* Simple Input Container - Two-layer design */
+.input-container.simple {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    background: #252526;
+    /* Outer container dark bg */
+    border: 1px solid #333;
+    /* Subtle border for the container */
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    padding: 6px;
+    /* Padding creates the 'frame' effect */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.input-container.simple:focus-within {
+    border-color: #333;
+    /* Keep uniform */
+}
+
+.main-input {
+    flex: 1;
+    background: #3b3b3b;
+    /* Inner filled input color */
+    border: none;
+    color: #cccccc;
+    /* text color */
+    padding: 10px 12px;
+    font-size: 0.9rem;
+    outline: none;
+    min-height: 20px;
+    border-radius: 4px;
+    /* input itself is rounded */
+    transition: background 0.2s;
+}
+
+.main-input::placeholder {
+    color: #666;
+}
+
+.main-input:focus {
+    background: #3b3b3b;
+    /* Maintain color on focus */
+    color: #fff;
+}
+
+.submit-arrow {
+    background: transparent;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 0 12px;
+    /* Spacing from input */
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    height: 100%;
+    /* Match height */
+}
+
+.submit-arrow:hover {
+    color: #ccc;
+    background: transparent;
+}
+
+.submit-arrow:disabled {
+    color: #444;
+    cursor: default;
+}
+
+/* Messages */
+.messages-area {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.message-bubble {
+    padding: 10px 14px;
+    border-radius: 6px;
+    line-height: 1.5;
+    font-size: 0.95rem;
+    max-width: 90%;
+}
+
+.message.user .message-bubble {
+    background: #0e639c;
+    /* VS Code blue */
+    color: #fff;
+    align-self: flex-end;
+}
+
+.message.ai .message-bubble {
+    background: #252526;
+    border: 1px solid #3c3c3c;
+    color: #e0e0e0;
+    align-self: flex-start;
+}
